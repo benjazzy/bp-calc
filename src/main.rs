@@ -22,7 +22,7 @@ fn prompt() {
 
         print!(">> ");
         buf = read!("{}\n");
-        match buf.as_str() {
+        match buf.trim() {
             "q" => return,
             "a" => {
                 if let Some(item) = item_prompt() {
@@ -38,7 +38,7 @@ fn prompt() {
                     crafter.print_blueprint_info(calculate(&items));
                 }
             }
-            _ => println!("Unkown command {buf}"),
+            _ => println!("Unknown command {buf}"),
         }
     }
 }
@@ -47,14 +47,14 @@ fn item_prompt() -> Option<BlueprintResource> {
     print!("Type: ");
     let mut buf: String = read!("{}\n");
     buf = buf.to_lowercase();
-    let Ok(item_type) = ItemType::try_from(buf.as_str()) else {
+    let Ok(item_type) = ItemType::try_from(buf.trim()) else {
         println!("Unknown item name {buf}");
         return None;
     };
 
     print!("Count: ");
     buf = read!("{}\n");
-    let Ok(count) = buf.parse::<usize>() else {
+    let Ok(count) = buf.trim().parse::<usize>() else {
         println!("Invalid int {buf}");
         return None;
     };
