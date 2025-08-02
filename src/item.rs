@@ -2,9 +2,9 @@ use std::{collections::HashMap, sync::LazyLock};
 
 use color_eyre::eyre::eyre;
 
-pub static ITEMS: LazyLock<HashMap<&str, Item>> = LazyLock::new(|| {
+pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
     ITEMS_LIST.iter().fold(HashMap::new(), |mut acc, item| {
-        let old = acc.insert(item.item_type.into(), *item);
+        let old = acc.insert(item.item_type, *item);
         assert!(old.is_none(), "Duplicate item found in item list!");
 
         acc
@@ -37,7 +37,7 @@ pub const WOOD: Item = Item {
     stack_size: 100,
 };
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub enum ItemType {
     Fiber,
     Hide,
@@ -46,21 +46,21 @@ pub enum ItemType {
 }
 
 impl ItemType {
-    const FIBER: &str = "fiber";
-    const HIDE: &str = "hide";
-    const METALINGOT: &str = "metal ingot";
-    const WOOD: &str = "wood";
+    const FIBER: &str = "Fiber";
+    const HIDE: &str = "Hide";
+    const METALINGOT: &str = "Metal Ingot";
+    const WOOD: &str = "Wood";
 }
 
 impl TryFrom<&str> for ItemType {
     type Error = color_eyre::Report;
 
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        match value {
-            ItemType::FIBER => Ok(ItemType::Fiber),
-            ItemType::HIDE => Ok(ItemType::Hide),
-            ItemType::METALINGOT => Ok(ItemType::MetalIngot),
-            ItemType::WOOD => Ok(ItemType::Wood),
+    fn try_from(mut value: &str) -> Result<Self, Self::Error> {
+        match value.to_lowercase().as_str() {
+            "fiber" => Ok(ItemType::Fiber),
+            "hide" => Ok(ItemType::Hide),
+            "metal ingot" | "mi" => Ok(ItemType::MetalIngot),
+            "wood" => Ok(ItemType::Wood),
             _ => Err(eyre!(format!("Unkown item type {value}"))),
         }
     }
@@ -133,5 +133,25 @@ impl std::fmt::Display for BlueprintResource {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let BlueprintResource { item_type, count } = self;
         write!(f, "{item_type}: {count}")
+    }
+}
+
+impl PartialEq for BlueprintResource {
+    fn eq(&self, other: &Self) -> bool {
+        self.item_type == other.item_type
+    }
+}
+
+impl Eq for BlueprintResource {}
+
+impl PartialOrd for BlueprintResource {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.item_type.partial_cmp(&other.item_type)
+    }
+}
+
+impl Ord for BlueprintResource {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.item_type.cmp(&other.item_type)
     }
 }

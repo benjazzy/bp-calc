@@ -54,7 +54,7 @@ impl Crafter<'_> {
                 (slots, weight)
             });
 
-        let possible = blueprint_slots <= *slots as usize;
+        let possible = blueprint_slots < *slots as usize;
         let style = if possible {
             Style::new().green()
         } else {
