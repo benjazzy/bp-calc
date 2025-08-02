@@ -26,7 +26,10 @@ pub const CRAFTERS: &[Crafter<'static>] = &[
 ];
 
 pub fn argy_modifier(mut item_result: ItemResult) -> ItemResult {
-    if item_result.item_type == ItemType::MetalIngot {
+    if item_result.item_type == ItemType::MetalIngot
+        || item_result.item_type == ItemType::Crystal
+        || item_result.item_type == ItemType::Polymer
+    {
         item_result.weight /= 2.0;
     }
 

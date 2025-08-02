@@ -11,7 +11,13 @@ pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
     })
 });
 
-const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD];
+const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL];
+
+pub const CRYSTAL: Item = Item {
+    item_type: ItemType::Crystal,
+    weight: 1.0,
+    stack_size: 100,
+};
 
 pub const FIBER: Item = Item {
     item_type: ItemType::Fiber,
@@ -31,6 +37,12 @@ pub const METALINGOT: Item = Item {
     stack_size: 300,
 };
 
+pub const POLYMER: Item = Item {
+    item_type: ItemType::Polymer,
+    weight: 0.25,
+    stack_size: 100,
+};
+
 pub const WOOD: Item = Item {
     item_type: ItemType::Wood,
     weight: 0.5,
@@ -39,16 +51,20 @@ pub const WOOD: Item = Item {
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub enum ItemType {
+    Crystal,
     Fiber,
     Hide,
     MetalIngot,
+    Polymer,
     Wood,
 }
 
 impl ItemType {
+    const CRYSTAL: &str = "Crystal";
     const FIBER: &str = "Fiber";
     const HIDE: &str = "Hide";
     const METALINGOT: &str = "Metal Ingot";
+    const POLYMER: &str = "Polymer";
     const WOOD: &str = "Wood";
 }
 
@@ -57,9 +73,11 @@ impl TryFrom<&str> for ItemType {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value.to_lowercase().as_str() {
+            "crystal" => Ok(ItemType::Crystal),
             "fiber" => Ok(ItemType::Fiber),
             "hide" => Ok(ItemType::Hide),
             "metal ingot" | "mi" => Ok(ItemType::MetalIngot),
+            "polymer" => Ok(ItemType::Polymer),
             "wood" => Ok(ItemType::Wood),
             _ => Err(eyre!(format!("Unkown item type {value}"))),
         }
@@ -69,9 +87,11 @@ impl TryFrom<&str> for ItemType {
 impl From<ItemType> for &'static str {
     fn from(val: ItemType) -> Self {
         match val {
+            ItemType::Crystal => ItemType::CRYSTAL,
             ItemType::Fiber => ItemType::FIBER,
             ItemType::Hide => ItemType::HIDE,
             ItemType::MetalIngot => ItemType::METALINGOT,
+            ItemType::Polymer => ItemType::POLYMER,
             ItemType::Wood => ItemType::WOOD,
         }
     }
