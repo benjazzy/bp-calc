@@ -55,7 +55,7 @@ impl ItemType {
 impl TryFrom<&str> for ItemType {
     type Error = color_eyre::Report;
 
-    fn try_from(mut value: &str) -> Result<Self, Self::Error> {
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value.to_lowercase().as_str() {
             "fiber" => Ok(ItemType::Fiber),
             "hide" => Ok(ItemType::Hide),
@@ -146,7 +146,7 @@ impl Eq for BlueprintResource {}
 
 impl PartialOrd for BlueprintResource {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.item_type.partial_cmp(&other.item_type)
+        Some(self.cmp(other))
     }
 }
 

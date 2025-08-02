@@ -1,7 +1,7 @@
-use std::collections::{BTreeSet, HashSet};
+use std::collections::BTreeSet;
 
-use crafter::{CRAFTERS, argy_modifier};
-use item::{BlueprintResource, ITEMS, Item, ItemResult, ItemType};
+use crafter::CRAFTERS;
+use item::{BlueprintResource, ITEMS, ItemResult, ItemType};
 use text_io::read;
 
 mod crafter;
