@@ -7,3 +7,4 @@ edition = "2024"
 color-eyre = "0.6.5"
 owo-colors = "4.2.2"
 text_io = "0.1.13"
+clap = {  version = "4.5.42", features = ["derive"] }

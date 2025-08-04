@@ -17,36 +17,42 @@ pub const CRYSTAL: Item = Item {
     item_type: ItemType::Crystal,
     weight: 1.0,
     stack_size: 100,
+    aliases: &["crystal"],
 };
 
 pub const FIBER: Item = Item {
     item_type: ItemType::Fiber,
     weight: 0.01,
     stack_size: 300,
+    aliases: &["fiber"],
 };
 
 pub const HIDE: Item = Item {
     item_type: ItemType::Hide,
     weight: 0.01,
     stack_size: 200,
+    aliases: &["hide"],
 };
 
 pub const METALINGOT: Item = Item {
     item_type: ItemType::MetalIngot,
     weight: 1.0,
     stack_size: 300,
+    aliases: &["metal ingot", "metalingot", "mi"],
 };
 
 pub const POLYMER: Item = Item {
     item_type: ItemType::Polymer,
     weight: 0.25,
     stack_size: 100,
+    aliases: &["polymer", "poly"],
 };
 
 pub const WOOD: Item = Item {
     item_type: ItemType::Wood,
     weight: 0.5,
     stack_size: 100,
+    aliases: &["wood"],
 };
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
@@ -63,26 +69,26 @@ impl ItemType {
     const CRYSTAL: &str = "Crystal";
     const FIBER: &str = "Fiber";
     const HIDE: &str = "Hide";
-    const METALINGOT: &str = "Metal Ingot";
+    const METAL_INGOT: &str = "Metal Ingot";
     const POLYMER: &str = "Polymer";
     const WOOD: &str = "Wood";
 }
 
-impl TryFrom<&str> for ItemType {
-    type Error = color_eyre::Report;
-
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        match value.to_lowercase().as_str() {
-            "crystal" => Ok(ItemType::Crystal),
-            "fiber" => Ok(ItemType::Fiber),
-            "hide" => Ok(ItemType::Hide),
-            "metal ingot" | "mi" => Ok(ItemType::MetalIngot),
-            "polymer" => Ok(ItemType::Polymer),
-            "wood" => Ok(ItemType::Wood),
-            _ => Err(eyre!(format!("Unknown item type {value}"))),
-        }
-    }
-}
+// impl TryFrom<&str> for ItemType {
+//     type Error = color_eyre::Report;
+//
+//     fn try_from(value: &str) -> Result<Self, Self::Error> {
+//         match value.to_lowercase().as_str() {
+//             "crystal" => Ok(ItemType::Crystal),
+//             "fiber" => Ok(ItemType::Fiber),
+//             "hide" => Ok(ItemType::Hide),
+//             "metal ingot" | "mi" | "metalingot" => Ok(ItemType::MetalIngot),
+//             "polymer" => Ok(ItemType::Polymer),
+//             "wood" => Ok(ItemType::Wood),
+//             _ => Err(eyre!(format!("Unknown item type {value}"))),
+//         }
+//     }
+// }
 
 impl From<ItemType> for &'static str {
     fn from(val: ItemType) -> Self {
@@ -90,7 +96,7 @@ impl From<ItemType> for &'static str {
             ItemType::Crystal => ItemType::CRYSTAL,
             ItemType::Fiber => ItemType::FIBER,
             ItemType::Hide => ItemType::HIDE,
-            ItemType::MetalIngot => ItemType::METALINGOT,
+            ItemType::MetalIngot => ItemType::METAL_INGOT,
             ItemType::Polymer => ItemType::POLYMER,
             ItemType::Wood => ItemType::WOOD,
         }
@@ -105,13 +111,14 @@ impl std::fmt::Display for ItemType {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub struct Item {
+pub struct Item<'a> {
     pub item_type: ItemType,
     pub weight: f64,
     pub stack_size: u16,
+    pub aliases: &'a [&'a str],
 }
 
-impl Item {
+impl Item<'_> {
     pub fn calculate(self, count: usize) -> ItemResult {
         let weight = self.weight * count as f64;
         let slots = count.div_ceil(self.stack_size as usize);
