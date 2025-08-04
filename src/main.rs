@@ -1,8 +1,9 @@
 use std::collections::BTreeSet;
-
+use color_eyre::eyre::eyre;
 use crafter::CRAFTERS;
 use item::{BlueprintResource, ITEMS, ItemResult, ItemType};
 use text_io::read;
+use crate::item::{Item, ITEMS_LIST};
 
 mod crafter;
 mod item;
@@ -57,13 +58,29 @@ fn prompt() {
     }
 }
 
+fn parse_item_type(input: &str) -> color_eyre::Result<ItemType> {
+    let input = input.trim();
+    if let Ok(index) = input.parse::<usize>() {
+        return ITEMS_LIST.get(index).map(|item| item.item_type).ok_or_else(|| {
+            eyre!("Item type index {index} out of range")
+        });
+    }
+    
+    ItemType::try_from(input)
+}
+
 fn item_prompt() -> Option<BlueprintResource> {
+    print_possible_items();
     print!("Type: ");
     let mut buf: String = read!("{}\n");
-    buf = buf.to_lowercase();
-    let Ok(item_type) = ItemType::try_from(buf.trim()) else {
-        println!("Unknown item name {buf}");
-        return None;
+    buf.make_ascii_lowercase();
+    
+    let item_type = match parse_item_type(&buf) {
+        Ok(t) => t,
+        Err(e) => {
+            println!("e");
+            return None;
+        }
     };
 
     print!("Count: ");
@@ -74,6 +91,12 @@ fn item_prompt() -> Option<BlueprintResource> {
     };
 
     Some(BlueprintResource { item_type, count })
+}
+
+fn print_possible_items() {
+    for (i, Item {item_type, ..}) in ITEMS_LIST.iter().enumerate() {
+        println!("{i}: {item_type}");
+    }
 }
 
 fn calculate<'b, I>(blueprint_cost: I) -> impl IntoIterator<Item = ItemResult>

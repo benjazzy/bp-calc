@@ -11,7 +11,7 @@ pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
     })
 });
 
-const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL];
+pub const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL];
 
 pub const CRYSTAL: Item = Item {
     item_type: ItemType::Crystal,
@@ -79,7 +79,7 @@ impl TryFrom<&str> for ItemType {
             "metal ingot" | "mi" => Ok(ItemType::MetalIngot),
             "polymer" => Ok(ItemType::Polymer),
             "wood" => Ok(ItemType::Wood),
-            _ => Err(eyre!(format!("Unkown item type {value}"))),
+            _ => Err(eyre!(format!("Unknown item type {value}"))),
         }
     }
 }
