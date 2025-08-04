@@ -9,7 +9,7 @@ pub struct Cli {
     pub list_items: bool,
 
     #[arg(short, long, value_parser = parse_item)]
-    pub items: Vec<BlueprintResource>,
+    pub item: Vec<BlueprintResource>,
 }
 
 pub fn parse_item(s: &str) -> color_eyre::Result<BlueprintResource> {

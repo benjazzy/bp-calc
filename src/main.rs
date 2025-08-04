@@ -25,12 +25,12 @@ fn main() {
         return;
     }
 
-    for item_result in calculate(cli.items.iter()) {
+    for item_result in calculate(cli.item.iter()) {
         println!("{item_result}");
     }
     println!("======================");
     for crafter in CRAFTERS {
-        crafter.print_blueprint_info(calculate(cli.items.iter()));
+        crafter.print_blueprint_info(calculate(cli.item.iter()));
     }
 }
 

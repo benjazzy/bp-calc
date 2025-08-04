@@ -11,7 +11,14 @@ pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
     })
 });
 
-pub const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL];
+pub const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL, CEMENTING_PASTE, STONE, THATCH];
+
+pub const CEMENTING_PASTE: Item = Item {
+    item_type: ItemType::CementingPaste,
+    weight: 0.01,
+    stack_size: 100,
+    aliases: &["cementing paste", "cp"],
+};
 
 pub const CRYSTAL: Item = Item {
     item_type: ItemType::Crystal,
@@ -48,6 +55,19 @@ pub const POLYMER: Item = Item {
     aliases: &["polymer", "poly"],
 };
 
+pub const STONE: Item = Item {
+    item_type: ItemType::Stone,
+    weight: 0.5,
+    stack_size: 100,
+    aliases: &["stone"],
+};
+pub const THATCH: Item = Item {
+    item_type: ItemType::Thatch,
+    weight: 0.02,
+    stack_size: 200,
+    aliases: &["thatch"],
+};
+
 pub const WOOD: Item = Item {
     item_type: ItemType::Wood,
     weight: 0.5,
@@ -57,47 +77,40 @@ pub const WOOD: Item = Item {
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Ord, Hash)]
 pub enum ItemType {
+    CementingPaste,
     Crystal,
     Fiber,
     Hide,
     MetalIngot,
     Polymer,
+    Stone,
+    Thatch,
     Wood,
 }
 
 impl ItemType {
+    const CEMENTING_PASTE: &str = "Cementing Paste";
     const CRYSTAL: &str = "Crystal";
     const FIBER: &str = "Fiber";
     const HIDE: &str = "Hide";
     const METAL_INGOT: &str = "Metal Ingot";
     const POLYMER: &str = "Polymer";
+    const STONE: &str = "Stone";
+    const THATCH: &str = "Thatch";
     const WOOD: &str = "Wood";
 }
-
-// impl TryFrom<&str> for ItemType {
-//     type Error = color_eyre::Report;
-//
-//     fn try_from(value: &str) -> Result<Self, Self::Error> {
-//         match value.to_lowercase().as_str() {
-//             "crystal" => Ok(ItemType::Crystal),
-//             "fiber" => Ok(ItemType::Fiber),
-//             "hide" => Ok(ItemType::Hide),
-//             "metal ingot" | "mi" | "metalingot" => Ok(ItemType::MetalIngot),
-//             "polymer" => Ok(ItemType::Polymer),
-//             "wood" => Ok(ItemType::Wood),
-//             _ => Err(eyre!(format!("Unknown item type {value}"))),
-//         }
-//     }
-// }
 
 impl From<ItemType> for &'static str {
     fn from(val: ItemType) -> Self {
         match val {
+            ItemType::CementingPaste => ItemType::CEMENTING_PASTE,
             ItemType::Crystal => ItemType::CRYSTAL,
             ItemType::Fiber => ItemType::FIBER,
             ItemType::Hide => ItemType::HIDE,
             ItemType::MetalIngot => ItemType::METAL_INGOT,
             ItemType::Polymer => ItemType::POLYMER,
+            ItemType::Stone => ItemType::STONE,
+            ItemType::Thatch => ItemType::THATCH,
             ItemType::Wood => ItemType::WOOD,
         }
     }

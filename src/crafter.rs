@@ -23,12 +23,29 @@ pub const CRAFTERS: &[Crafter<'static>] = &[
         modifier: Some(argy_modifier),
         slots: 300,
     },
+    Crafter {
+        name: "Castoroides",
+        modifier: Some(castoroides_modifier),
+        slots: 300,
+    }
 ];
 
 pub fn argy_modifier(mut item_result: ItemResult) -> ItemResult {
     if item_result.item_type == ItemType::MetalIngot
         || item_result.item_type == ItemType::Crystal
         || item_result.item_type == ItemType::Polymer
+    {
+        item_result.weight /= 2.0;
+    }
+
+    item_result
+}
+
+pub fn castoroides_modifier(mut item_result: ItemResult) -> ItemResult {
+    if item_result.item_type == ItemType::Fiber
+        || item_result.item_type == ItemType::Stone
+        || item_result.item_type == ItemType::Wood
+        || item_result.item_type == ItemType::Thatch
     {
         item_result.weight /= 2.0;
     }
