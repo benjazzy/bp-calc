@@ -11,7 +11,7 @@ pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
     })
 });
 
-pub const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL, CEMENTING_PASTE, STONE, THATCH];
+pub const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL, CEMENTING_PASTE, STONE, THATCH, SLICA_PEARL];
 
 pub const CEMENTING_PASTE: Item = Item {
     item_type: ItemType::CementingPaste,
@@ -55,6 +55,13 @@ pub const POLYMER: Item = Item {
     aliases: &["polymer", "poly"],
 };
 
+pub const SLICA_PEARL: Item = Item {
+    item_type: ItemType::SilicaPearl,
+    weight: 0.02,
+    stack_size: 100,
+    aliases: &["silica pearl", "silica", "pearl", "silicapearl", "sp"],
+};
+
 pub const STONE: Item = Item {
     item_type: ItemType::Stone,
     weight: 0.5,
@@ -83,6 +90,7 @@ pub enum ItemType {
     Hide,
     MetalIngot,
     Polymer,
+    SilicaPearl,
     Stone,
     Thatch,
     Wood,
@@ -95,6 +103,7 @@ impl ItemType {
     const HIDE: &str = "Hide";
     const METAL_INGOT: &str = "Metal Ingot";
     const POLYMER: &str = "Polymer";
+    const SILICA_PEARL: &str = "Silica Pearl";
     const STONE: &str = "Stone";
     const THATCH: &str = "Thatch";
     const WOOD: &str = "Wood";
@@ -109,6 +118,7 @@ impl From<ItemType> for &'static str {
             ItemType::Hide => ItemType::HIDE,
             ItemType::MetalIngot => ItemType::METAL_INGOT,
             ItemType::Polymer => ItemType::POLYMER,
+            ItemType::SilicaPearl => ItemType::SILICA_PEARL,
             ItemType::Stone => ItemType::STONE,
             ItemType::Thatch => ItemType::THATCH,
             ItemType::Wood => ItemType::WOOD,
