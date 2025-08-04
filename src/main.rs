@@ -28,7 +28,7 @@ fn main() {
     for item_result in calculate(cli.items.iter()) {
         println!("{item_result}");
     }
-    println!("=====");
+    println!("======================");
     for crafter in CRAFTERS {
         crafter.print_blueprint_info(calculate(cli.items.iter()));
     }
