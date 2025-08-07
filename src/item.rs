@@ -1,6 +1,5 @@
+use clap::{Arg, ArgAction};
 use std::{collections::HashMap, sync::LazyLock};
-
-use color_eyre::eyre::eyre;
 
 pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
     ITEMS_LIST.iter().fold(HashMap::new(), |mut acc, item| {
@@ -17,7 +16,7 @@ pub const CEMENTING_PASTE: Item = Item {
     item_type: ItemType::CementingPaste,
     weight: 0.01,
     stack_size: 100,
-    aliases: &["cementing paste", "cp"],
+    aliases: &["cementing-paste", "cementing paste", "cp"],
 };
 
 pub const CRYSTAL: Item = Item {
@@ -45,7 +44,7 @@ pub const METALINGOT: Item = Item {
     item_type: ItemType::MetalIngot,
     weight: 1.0,
     stack_size: 300,
-    aliases: &["metal ingot", "metalingot", "mi"],
+    aliases: &["metal-ingot", "metal ingot", "metalingot", "mi"],
 };
 
 pub const POLYMER: Item = Item {
@@ -59,7 +58,7 @@ pub const SLICA_PEARL: Item = Item {
     item_type: ItemType::SilicaPearl,
     weight: 0.02,
     stack_size: 100,
-    aliases: &["silica pearl", "silica", "pearl", "silicapearl", "sp"],
+    aliases: &["silica-pearl", "silica pearl", "silica", "pearl", "silicapearl", "sp"],
 };
 
 pub const STONE: Item = Item {
@@ -151,6 +150,17 @@ impl Item<'_> {
             slots,
             weight,
         }
+    }
+}
+
+impl Into<Arg> for &Item<'static> {
+    fn into(self) -> Arg {
+        let id: &str = self.item_type.into();
+        Arg::new(id)
+            .long(self.aliases[0])
+            .aliases(&self.aliases[1..])
+            .action(ArgAction::Set)
+            .value_parser(clap::value_parser!(usize))
     }
 }
 
