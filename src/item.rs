@@ -153,12 +153,12 @@ impl Item<'_> {
     }
 }
 
-impl Into<Arg> for &Item<'static> {
-    fn into(self) -> Arg {
-        let id: &str = self.item_type.into();
+impl From<&Item<'static>> for Arg {
+    fn from(val: &Item<'static>) -> Self {
+        let id: &str = val.item_type.into();
         Arg::new(id)
-            .long(self.aliases[0])
-            .aliases(&self.aliases[1..])
+            .long(val.aliases[0])
+            .aliases(&val.aliases[1..])
             .action(ArgAction::Set)
             .value_parser(clap::value_parser!(usize))
     }

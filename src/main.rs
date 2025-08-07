@@ -9,7 +9,7 @@ mod item;
 fn main() {
     let matches = matches();
 
-    let calculate_iter = calculate(ITEMS_LIST.into_iter().filter_map(|item| {
+    let calculate_iter = calculate(ITEMS_LIST.iter().filter_map(|item| {
         let count: usize = matches.get_one(item.item_type.into()).copied()?;
 
         Some(BlueprintResource { item_type: item.item_type, count })
