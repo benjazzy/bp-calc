@@ -1,16 +1,17 @@
 use clap::{Arg, ArgAction};
-use std::{collections::HashMap, sync::LazyLock};
 
-pub static ITEMS: LazyLock<HashMap<ItemType, Item>> = LazyLock::new(|| {
-    ITEMS_LIST.iter().fold(HashMap::new(), |mut acc, item| {
-        let old = acc.insert(item.item_type, *item);
-        assert!(old.is_none(), "Duplicate item found in item list!");
-
-        acc
-    })
-});
-
-pub const ITEMS_LIST: &[Item] = &[FIBER, HIDE, METALINGOT, WOOD, POLYMER, CRYSTAL, CEMENTING_PASTE, STONE, THATCH, SLICA_PEARL];
+pub const ITEMS: &[Item] = &[
+    FIBER,
+    HIDE,
+    METALINGOT,
+    WOOD,
+    POLYMER,
+    CRYSTAL,
+    CEMENTING_PASTE,
+    STONE,
+    THATCH,
+    SLICA_PEARL,
+];
 
 pub const CEMENTING_PASTE: Item = Item {
     item_type: ItemType::CementingPaste,
@@ -58,7 +59,14 @@ pub const SLICA_PEARL: Item = Item {
     item_type: ItemType::SilicaPearl,
     weight: 0.02,
     stack_size: 100,
-    aliases: &["silica-pearl", "silica pearl", "silica", "pearl", "silicapearl", "sp"],
+    aliases: &[
+        "silica-pearl",
+        "silica pearl",
+        "silica",
+        "pearl",
+        "silicapearl",
+        "sp",
+    ],
 };
 
 pub const STONE: Item = Item {
